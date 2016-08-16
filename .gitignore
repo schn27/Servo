@@ -1,0 +1,8 @@
+list
+Bin/Obj
+Bin/Servo.hex
+*.Opt
+*.Bak
+*.sublime*
+*.uvopt
+*.uvgui*
