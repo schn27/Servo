@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-void Interface_Init(void);
-void Interface_Update(void);
-uint8_t Interface_IsFreeMode(void);
+void interface_init(void);
+void interface_update(void);
+uint8_t interface_isFreeMode(void);
 
 #endif
 

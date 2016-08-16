@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct tag_CONFIG
-{
+typedef struct {
 	uint8_t addr;			// адрес на шине rs485
 	uint8_t addr_alias;		// групповой адрес на шине rs485
 
@@ -31,14 +30,14 @@ typedef struct tag_CONFIG
 	int16_t kD2;			// Kd для регулятора скорости (8 бит дробная часть)
 
 	uint8_t crc;
-} CONFIG;
+} config_t;
 
-extern CONFIG data config;
+extern config_t data config;
 
-void Config_Init(void);
-void Config_Store(void);
-void Config_CheckModified(void);
-void Config_SetModified(void);
-void Config_ApplyManual(void);
+void config_init(void);
+void config_store(void);
+void config_checkModified(void);
+void config_setModified(void);
+void config_applyManual(void);
 
 #endif

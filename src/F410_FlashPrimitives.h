@@ -58,9 +58,9 @@ typedef UINT FLADDR;
 // Exported Function Prototypes
 //-----------------------------------------------------------------------------
 
-void          FLASH_ByteWrite (FLADDR addr, char byte);
-unsigned char FLASH_ByteRead  (FLADDR addr);
-void          FLASH_PageErase (FLADDR addr);
+void          flash_byteWrite (FLADDR addr, char byte);
+unsigned char flash_byteRead  (FLADDR addr);
+void          flash_pageErase (FLADDR addr);
 
 //-----------------------------------------------------------------------------
 // Close Header #define

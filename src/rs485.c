@@ -3,16 +3,15 @@
 #include "arraysize.h"
 
 static uint8_t rxbuf[32];
-static OBUFFER data rx;
+static obuffer_t data rx;
 
 static uint8_t txbuf[16];
-static OBUFFER data tx;
+static obuffer_t data tx;
 
 void rs485_enable_tx(char enable);
 
 
-void rs485_init(void)
-{
+void rs485_init(void) {
 	obuffer_init(rx, rxbuf, ARRAYSIZE(rxbuf));
 	obuffer_init(tx, txbuf, ARRAYSIZE(txbuf));
 
@@ -28,19 +27,18 @@ void rs485_init(void)
 }
 
 
-char rs485_put(uint8_t value)
-{
+char rs485_put(uint8_t value) {
 	char res = 0;
 
 	ES0 = 0;		// disable UART interrupt
 
 	res = obuffer_put(tx, value);
 
-	if (REN0)					// if transmition is disabled (i.e. reception is enabled)
-	{							// enable transmition and send the first byte
+	// if transmition is disabled (i.e. reception is enabled)
+	// enable transmition and send the first byte
+	if (REN0) {
 		uint8_t t;
-		if (obuffer_get(tx, t))
-		{
+		if (obuffer_get(tx, t)) {
 			rs485_enable_tx(1);
 			SBUF0 = t;
 		}
@@ -52,8 +50,7 @@ char rs485_put(uint8_t value)
 }
 
 
-char rs485_get(uint8_t *value)
-{
+char rs485_get(uint8_t *value) {
 	char res = 0;
 	uint8_t t = 0;
 
@@ -66,38 +63,31 @@ char rs485_get(uint8_t *value)
 }
 
 
-void rs485_isr(void) UART_INTERRUPT_HANDLER
-{
+void rs485_isr(void) UART_INTERRUPT_HANDLER {
 	// byte received?
-	if (RI0)
-	{
+	if (RI0) {
 		RI0 = 0;
 		obuffer_put(rx, SBUF0);
 	}
 
 	// byte sent?
-	if (TI0)
-	{
+	if (TI0) {
 		uint8_t t;
 		TI0 = 0;
-		if (obuffer_get(tx, t))
+		if (obuffer_get(tx, t)) {
 			SBUF0 = t;
-		else
+		} else {
 			rs485_enable_tx(0);
-			
+		}
 	}
 }
 
 
-static void rs485_enable_tx(char enable)
-{
-	if (enable)
-	{
+static void rs485_enable_tx(char enable) {
+	if (enable) {
 		REN0 = 0;	// disable reception
 		RS485TX_ENABLE();
-	}
-	else
-	{
+	} else {
 		RS485TX_DISABLE();
 		REN0 = 1;	// enable reception
 	}

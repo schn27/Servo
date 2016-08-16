@@ -11,17 +11,16 @@
   MaxLen: 15 байт(127 бит) - обнаружение
     одинарных, двойных, тройных и всех нечетных ошибок
 */
-uint8_t Crc8(uint8_t *pcBlock, int len)
-{
+uint8_t crc8(uint8_t *pcBlock, int len) {
 	uint8_t crc = 0xFF;
 	char i;
 
-	while (len--)
-	{
+	while (len--) {
 		crc ^= *pcBlock++;
 
-		for (i = 0; i < 8; ++i)
+		for (i = 0; i < 8; ++i) {
 			crc = (crc & 0x80) ? (crc << 1) ^ 0x31 : (crc << 1);
+		}
 	}
 
 	return crc & 0xFF;	// & 0xFF для случая 16bit char
@@ -41,8 +40,7 @@ uint8_t Crc8(uint8_t *pcBlock, int len)
     одинарных, двойных, тройных и всех нечетных ошибок
 */
  
-uint8_t Crc8(uint8_t *pcBlock, int len)
-{
+uint8_t crc8(uint8_t *pcBlock, int len) {
 	static const uint8_t crc8_table[256] = {
 	    0x00, 0x31, 0x62, 0x53, 0xC4, 0xF5, 0xA6, 0x97,
 	    0xB9, 0x88, 0xDB, 0xEA, 0x7D, 0x4C, 0x1F, 0x2E,
@@ -80,8 +78,9 @@ uint8_t Crc8(uint8_t *pcBlock, int len)
 
     uint8_t crc = 0xFF;
  
-    while (len--)
+    while (len--) {
         crc = crc8_table[crc ^ *pcBlock++];
+    }
  
     return crc;
 }
@@ -100,17 +99,16 @@ uint8_t Crc8(uint8_t *pcBlock, int len)
   MaxLen: 4095 байт (32767 бит) - обнаружение
     одинарных, двойных, тройных и всех нечетных ошибок
 */
-uint16_t Crc16(uint8_t *pcBlock, int len)
-{
+uint16_t crc16(uint8_t *pcBlock, int len) {
 	uint16_t crc = 0xFFFF;
 	char i;
 
-	while (len--)
-	{
+	while (len--) {
 		crc ^= *pcBlock++ << 8;
 
-		for (i = 0; i < 8; ++i)
+		for (i = 0; i < 8; ++i) {
 			crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : (crc << 1);
+		}
     }
 
     return crc;
@@ -121,12 +119,12 @@ uint16_t Crc16(uint8_t *pcBlock, int len)
 
 #if USE_CHECKSUM == 1
 // Simple check sum MOD256
-uint8_t CheckSum(uint8_t *pcBlock, int len)
-{
+uint8_t checkSum(uint8_t *pcBlock, int len) {
 	uint8_t sum = 0;
 
-	while (len--)
+	while (len--) {
 		sum += *pcBlock++;
+	}
 
 	return sum & 0xFF;
 }

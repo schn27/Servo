@@ -10,42 +10,40 @@
 
 
 // настройки во Flash
-static CONFIG code configStored _at_ 0x7a00;
+static config_t code configStored _at_ 0x7a00;
 
 // копия настроек
-CONFIG data config;
+config_t data config;
 
 static uint8_t modified_timer = 0;
 
 
-void SetDefault(void);
-void CheckBounds(void);
-char ApplyBounds(int16_t *value, int16_t low_bound, int16_t high_bound);
+void setDefault(void);
+void checkBounds(void);
+char applyBounds(int16_t *value, int16_t low_bound, int16_t high_bound);
 
 
 // копирование настроек из Flash
-void Config_Init(void)
-{
+void config_init(void) {
 	uint16_t i = sizeof(config);
 	uint8_t *ptr = (uint8_t *)&config;
 	uint16_t addr = (uint16_t)&configStored;
 
-	while (i--)
-	{
-		*ptr++ = FLASH_ByteRead(addr++);
+	while (i--) {
+		*ptr++ = flash_byteRead(addr++);
 	}
 
-	if (Crc8((uint8_t *)&config, sizeof(config) - 1) == config.crc)
-		CheckBounds();
-	else
-		SetDefault();
+	if (crc8((uint8_t *)&config, sizeof(config) - 1) == config.crc) {
+		checkBounds();
+	} else {
+		setDefault();
+	}
 }
 
 
 // сохранение настроек во Flash и рестарт
-void Config_Store(void)
-{
-	uint16_t i = sizeof(CONFIG);
+void config_store(void) {
+	uint16_t i = sizeof(config_t);
 	uint8_t *ptr = (uint8_t *)&config;
 	uint16_t addr = (uint16_t)&configStored;
 
@@ -54,13 +52,12 @@ void Config_Store(void)
 
 	EA = 0;			// прерывания запрещены
 
-	config.crc = Crc8((uint8_t *)&config, sizeof(config) - 1);	// update crc
+	config.crc = crc8((uint8_t *)&config, sizeof(config) - 1);	// update crc
 
-	FLASH_PageErase(addr);
+	flash_pageErase(addr);
 
-	while (i--)
-	{
-		FLASH_ByteWrite(addr++, *ptr++);
+	while (i--) {
+		flash_byteWrite(addr++, *ptr++);
 	}	
 
 	RESET();
@@ -68,41 +65,36 @@ void Config_Store(void)
 
 
 // проверка таймера сохранения настроек после модификации
-void Config_CheckModified(void)
-{
-	if (modified_timer)
-	{
-		if (--modified_timer == 0)
-			Config_Store();
+void config_checkModified(void) {
+	if (modified_timer) {
+		if (--modified_timer == 0) {
+			config_store();
+		}
 	}
 }
 
 
 // запуск таймера сохранения настроек после модификации
-void Config_SetModified(void)
-{
+void config_setModified(void) {
 	modified_timer = 100;
 }
 
 
 // применение параметров режима ручной настройки
-void Config_ApplyManual(void)
-{
+void config_applyManual(void) {
 	config.reversed = config.endPoint1 > config.endPoint2;
 
-	if (config.reversed)
-	{
+	if (config.reversed) {
 		int16_t t = config.endPoint1;
 		config.endPoint1 = config.endPoint2;
 		config.endPoint2 = t;
 	}
 
-	Config_SetModified();
+	config_setModified();
 }
 
 
-static void SetDefault(void)
-{
+static void setDefault(void) {
 	config.addr = 255;
 	config.addr_alias = 0;
 
@@ -129,35 +121,32 @@ static void SetDefault(void)
 	config.kI2 = FIXED8P8(0.44);
 	config.kD2 = FIXED8P8(-20.0);
 
-	Config_Store();
+	config_store();
 }
 
 
-static void CheckBounds(void)
-{
+static void checkBounds(void) {
 	char changed = 
-		ApplyBounds(&config.centerOfs, -CONFIG_MAXPOS, CONFIG_MAXPOS) +
-		ApplyBounds(&config.endPoint1, -CONFIG_MAXPOS, config.centerOfs) +
-		ApplyBounds(&config.endPoint2, config.centerOfs, CONFIG_MAXPOS) +
-		ApplyBounds(&config.failSafePos, config.endPoint1, config.endPoint2);
+		applyBounds(&config.centerOfs, -CONFIG_MAXPOS, CONFIG_MAXPOS) +
+		applyBounds(&config.endPoint1, -CONFIG_MAXPOS, config.centerOfs) +
+		applyBounds(&config.endPoint2, config.centerOfs, CONFIG_MAXPOS) +
+		applyBounds(&config.failSafePos, config.endPoint1, config.endPoint2);
 
-	if (changed)
-		Config_Store();
+	if (changed) {
+		config_store();
+	}
 }
 
 
-static char ApplyBounds(int16_t *value, int16_t low_bound, int16_t high_bound)
-{
+static char applyBounds(int16_t *value, int16_t low_bound, int16_t high_bound) {
 	char changed = 0;
 
-	if (*value < low_bound)
-	{
+	if (*value < low_bound) {
 		*value = low_bound;
 		changed = 1;
 	}
 
-	if (*value > high_bound)
-	{
+	if (*value > high_bound) {
 		*value = high_bound;
 		changed = 1;
 	}

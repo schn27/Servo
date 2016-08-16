@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void MoveDeadZone(int16_t *center, int16_t value, uint16_t deadZone);
-int16_t GetValueFromDeadZone(int16_t center, int16_t refvalue, uint16_t deadZone);
+void deadZone_move(int16_t *center, int16_t value, uint16_t deadZone);
+int16_t deadZone_getValue(int16_t center, int16_t refvalue, uint16_t deadZone);
 
 #endif

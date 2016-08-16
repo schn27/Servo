@@ -65,30 +65,27 @@
 
 
 // данные для передачи обработчику прерывания PCA
-typedef struct tag_CONTROLDATA
-{
+typedef struct {
 	uint8_t direction;	// 0 - питание двигателя через Q1-Q4, 1 - через Q2-Q3
 	uint16_t pduty;		// длительность рабочего цикла ШИМ в отсчётах таймера PCA (разгон)
 	uint16_t nduty;		// длительность рабочего цикла ШИМ в отсчётах таймера PCA (торможение)
 	uint8_t dimming;	// количество разрешённых импульсов ШИМ в периоде из DIMMINGPERIOD импульсов
 	uint8_t isNew;		// 1 = данные обновлены (можно считывать в прерывании), 0 = данные считаны
-}
-CONTROLDATA;
+} controlData_t;
 
-static CONTROLDATA data controlData = {0};
+static controlData_t data controlData = {0};
 
 
 // 1 - управление двигателем разрешено, 0 - запрещено
 static uint8_t data motorEnabled = 0;
 
 
-static void BridgeStateControl(uint8_t phase, uint8_t portState);
-static uint8_t GetRandom(void);
+static void bridgeStateControl(uint8_t phase, uint8_t portState);
+static uint8_t getRandom(void);
 
 
 // инициализация ШИМ управления мостом (драйвера должны быть под запретом EN = 0)
-void Motor_Init(void)
-{
+void motor_init(void) {
     PCA0MD   = 0x08;	// WDT disabled, PCA clock = System clock
     PCA0CPM0 = 0x4C;	// HSO
     PCA0CPM1 = 0x4C;	// HSO
@@ -115,48 +112,46 @@ void Motor_Init(void)
 // преобразование нормированного управляющего воздействия в длительность рабочего цикла ШИМ
 // максимальный ШИМ: value = +32767, value = -32767
 // нулевой ШИМ: value = 0
-void Motor_Set(int16_t value, uint16_t uin)
-{
+void motor_set(int16_t value, uint16_t uin) {
 	uint16_t correction = 0;
 
-	if (controlData.isNew)
+	if (controlData.isNew) {
 		return;
+	}
 
 	controlData.direction = 0;
 
-	if (value < 0)
-	{
+	if (value < 0) {
 		controlData.direction = 1;
 		value = -value;
 	}
 
 	value /= (32768 / PERIOD);
 
-	if (value > MAXDUTYCYCLE)
+	if (value > MAXDUTYCYCLE) {
 		value = MAXDUTYCYCLE;
+	}
 
-	if (uin > UIN_NOMINAL) 
+	if (uin > UIN_NOMINAL) {
 		correction = ((uint32_t)value * (uin - UIN_NOMINAL) / uin);
+	}
 
 	controlData.dimming = DIMMINGMAX;
 
-	if (value <= correction)
-	{
+	if (value <= correction) {
 		controlData.pduty = controlData.nduty = 0;
-	}
-	else
-	{
+	} else {
 		controlData.pduty = value - correction;
 		controlData.nduty = value + DEADTIME;
 
-		if (controlData.pduty < MINDUTYCYCLE)
-		{
+		if (controlData.pduty < MINDUTYCYCLE) {
 			// при выходе на минимальный ШИМ дальнейшая регулировка ведётся диммингом
 			controlData.dimming = (controlData.pduty < DIMMINGMAX) ? controlData.pduty : DIMMINGMAX;
 			controlData.pduty = MINDUTYCYCLE;
 
-			if (controlData.nduty < controlData.pduty + DEADTIME)
+			if (controlData.nduty < controlData.pduty + DEADTIME) {
 				controlData.nduty = controlData.pduty + DEADTIME;
+			}
 		}
 	}
 
@@ -165,15 +160,13 @@ void Motor_Set(int16_t value, uint16_t uin)
 
 
 // разрешение управления двигателем, при запрете нижние ключи открываются, верхние закрываются
-void Motor_Enable(uint8_t enable)
-{
+void motor_enable(uint8_t enable) {
 	motorEnabled = enable;
 }
 
 
 // обработчик прерывания от PCA (от ведущего модуля)	
-void Motor_ISR(void) PCA_INTERRUPT_HANDLER
-{
+void motor_isr(void) PCA_INTERRUPT_HANDLER {
 	// локальная копия controlData
 	static uint8_t direction = 0;
 	static uint16_t pduty = 0;
@@ -214,14 +207,12 @@ void Motor_ISR(void) PCA_INTERRUPT_HANDLER
 	q1Time = q2Time = q3Time = q4Time = masterTime - 1;
 
 	// контроль состояния выводов управления мостом
-	BridgeStateControl(phase, portCtrl);
+	bridgeStateControl(phase, portCtrl);
 
 	// расчёт времён на полупериод вперёд (поэтому на phase == 1 считается передний фронт)
-	if (phase == 1)
-	{
+	if (phase == 1) {
 		// безопасное копирование заданной ширины ШИМ
-		if (controlData.isNew)
-		{
+		if (controlData.isNew) {
 			direction = controlData.direction;
 			pduty = controlData.pduty;
 			nduty = controlData.nduty;
@@ -229,22 +220,19 @@ void Motor_ISR(void) PCA_INTERRUPT_HANDLER
 			controlData.isNew = 0;
 		}
 
-		if (motorEnabled)
+		if (motorEnabled) {
 			DRIVER_ENABLE();
-		else
+		} else {
 			DRIVER_DISABLE();
+		}
 
-		activeCycle = (motorEnabled && pduty && (GetRandom() <= dimming));
+		activeCycle = (motorEnabled && pduty && (getRandom() <= dimming));
 
-		if (activeCycle)
-		{
-			if (direction == 0)
-			{
+		if (activeCycle) {
+			if (direction == 0) {
 				q1Time = masterTime + (PERIOD - pduty) / 2;	
 				q2Time = masterTime + (PERIOD - nduty) / 2;
-			}
-			else
-			{
+			} else {
 				q3Time = masterTime + (PERIOD - pduty) / 2;	
 				q4Time = masterTime + (PERIOD - nduty) / 2;
 			}
@@ -252,18 +240,12 @@ void Motor_ISR(void) PCA_INTERRUPT_HANDLER
 
 		masterTime += PERIOD / 2;
 		phase = 0;
-	}
-	else
-	{
-		if (activeCycle)
-		{
-			if (direction == 0)
-			{
+	} else {
+		if (activeCycle) {
+			if (direction == 0) {
 				q1Time = masterTime + pduty / 2;
 				q2Time = masterTime + nduty / 2;
-			}
-			else
-			{
+			} else {
 				q3Time = masterTime + pduty / 2;	
 				q4Time = masterTime + nduty / 2;
 			}
@@ -277,14 +259,12 @@ void Motor_ISR(void) PCA_INTERRUPT_HANDLER
 
 
 // детектирование расхождения фактического состояния выводов управления мостом с желаемым
-static void BridgeStateControl(uint8_t phase, uint8_t portState) CALLED_BY_PCA_INTERRUPT_HANDLER
-{
+static void bridgeStateControl(uint8_t phase, uint8_t portState) CALLED_BY_PCA_INTERRUPT_HANDLER {
 	uint8_t error = 
 		(portState != 0x00) && 
 		((phase == 0) || (portState != 0xC0 && portState != 0x06));
 
-	if (error)
-	{
+	if (error) {
 		DRIVER_DISABLE();
 		RESET();
 	}
@@ -293,15 +273,15 @@ static void BridgeStateControl(uint8_t phase, uint8_t portState) CALLED_BY_PCA_I
 
 
 // генератор псевдослучайной последовательности (Linear Feedback Shift Register)
-static uint8_t GetRandom(void) CALLED_BY_PCA_INTERRUPT_HANDLER
-{
+static uint8_t getRandom(void) CALLED_BY_PCA_INTERRUPT_HANDLER {
 	static uint16_t data lfsr = 0xA1A1;
 	uint8_t lsb = lfsr & 1;
 
 	lfsr >>= 1;
 
-	if (lsb)
+	if (lsb) {
 		lfsr ^= 0xA1A1;
+	}
 
 	return (lfsr & 0xFF) ? lfsr & 0xFF : 1;
 }

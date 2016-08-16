@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct tag_PID
-{
+typedef struct {
 	uint8_t fixedPointPos;
 	int16_t kP;
 	int16_t kI;
@@ -18,13 +17,10 @@ typedef struct tag_PID
 	int16_t out;
 
 	int32_t integr;
-}
-PID;
+} pidreg_t;
 
-//#define PIDX PID xdata
-
-void PID_Init(PID *pid);
-void PID_Calc(PID *pid);
+void pid_init(pidreg_t *pid);
+void pid_calc(pidreg_t *pid);
 
 
 #endif

@@ -31,9 +31,9 @@
 // Function Prototypes
 //-----------------------------------------------------------------------------
 
-void          FLASH_ByteWrite (FLADDR addr, char byte);
-unsigned char FLASH_ByteRead  (FLADDR addr);
-void          FLASH_PageErase (FLADDR addr);
+void          flash_byteWrite (FLADDR addr, char byte);
+unsigned char flash_byteRead  (FLADDR addr);
+void          flash_pageErase (FLADDR addr);
 
 //-----------------------------------------------------------------------------
 // FLASH_ByteWrite
@@ -49,8 +49,7 @@ void          FLASH_PageErase (FLADDR addr);
 // This routine writes <byte> to the linear FLASH address <addr>.
 //-----------------------------------------------------------------------------
 
-void FLASH_ByteWrite (FLADDR addr, char byte)
-{
+void flash_byteWrite (FLADDR addr, char byte) {
    bit EA_SAVE = EA;                   // Preserve EA
    char xdata * data pwrite;           // FLASH write pointer
 
@@ -91,8 +90,7 @@ void FLASH_ByteWrite (FLADDR addr, char byte)
 // This routine reads a <byte> from the linear FLASH address <addr>.
 //-----------------------------------------------------------------------------
 
-unsigned char FLASH_ByteRead (FLADDR addr)
-{
+unsigned char flash_byteRead (FLADDR addr) {
    bit EA_SAVE = EA;                   // Preserve EA
    char code * data pread;             // FLASH read pointer
    unsigned char byte;
@@ -124,8 +122,7 @@ unsigned char FLASH_ByteRead (FLADDR addr)
 //
 //-----------------------------------------------------------------------------
 
-void FLASH_PageErase (FLADDR addr)
-{
+void flash_pageErase (FLADDR addr) {
    bit EA_SAVE = EA;                   // Preserve EA
    char xdata * data pwrite;           // FLASH write pointer
 

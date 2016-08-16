@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct tag_properties_t
-{
+typedef struct {
 	int16_t original_command;
 	int16_t current_command;
 	int16_t command;
@@ -14,8 +13,7 @@ typedef struct tag_properties_t
 	int16_t speed;
 	uint16_t uin;
 	uint16_t iout;
-}
-properties_t;
+} properties_t;
 
 extern properties_t properties;
 

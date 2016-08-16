@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-void Motor_Init(void);
-void Motor_Set(int16_t value, uint16_t uin);
-void Motor_Enable(uint8_t enable);
+void motor_init(void);
+void motor_set(int16_t value, uint16_t uin);
+void motor_enable(uint8_t enable);
 
 #endif

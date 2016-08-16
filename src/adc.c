@@ -20,8 +20,7 @@ static uint16_t data uinAcc = 0;
 
 
 // init ADC and timer3
-void Adc_Init(void)
-{
+void adc_init(void) {
     REF0CN = 0x13;		// Vref = 2.2 V, Internal Analog Bias Generator on, Internal Reference Buffer enabled
 
     ADC0CF = 0x80;		// SAR clock = 2.88 MHz
@@ -38,10 +37,10 @@ void Adc_Init(void)
 
 
 // get current values (0..4095)
-uint8_t Adc_Get(uint16_t *pos, uint16_t *iout, uint16_t *uin)
-{
-	if (!ready)
+uint8_t adc_get(uint16_t *pos, uint16_t *iout, uint16_t *uin) {
+	if (!ready) {
 		return 0;
+	}
 
 	*pos = posAcc >> ACC_BITS;
 	*iout = ioutAcc >> ACC_BITS;
@@ -57,36 +56,30 @@ uint8_t Adc_Get(uint16_t *pos, uint16_t *iout, uint16_t *uin)
 
 
 // ADC interrupt handler
-void Adc_ISR(void) ADC_INTERRUPT_HANDLER
-{
+void adc_isr(void) ADC_INTERRUPT_HANDLER {
 	static uint8_t accCounter = 0;
 
 	AD0INT = 0;		// clear interrupt flag
 
-	if (ready)
-		return;		// wait for Adc_Get
+	if (ready) {
+		return;		// wait for adc_get
+	}
 
-	if (ADC0MX == ADCCHN_POS)
-	{
+	if (ADC0MX == ADCCHN_POS) {
 		posAcc += ADC0;
 		ADC0MX = ADCCHN_IOUT;
-	}
-	else if (ADC0MX == ADCCHN_IOUT)
-	{
+	} else if (ADC0MX == ADCCHN_IOUT) {
 		ioutAcc += ADC0;
 		ADC0MX = ADCCHN_UIN;
-	}
-	else if (ADC0MX == ADCCHN_UIN)
-	{
+	} else if (ADC0MX == ADCCHN_UIN) {
 		uinAcc += ADC0;
 		ADC0MX = ADCCHN_POS;
 
-		if (++accCounter >= (1 << ACC_BITS))
-		{
+		if (++accCounter >= (1 << ACC_BITS)) {
 			accCounter = 0;
 			ready = 1;	// all channels have been read
 		}
-	}
-	else
+	} else {
 		ADC0MX = ADCCHN_POS;
+	}
 }

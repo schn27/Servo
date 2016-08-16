@@ -29,43 +29,42 @@
 #include "config.h"
 
 
-void Calibration(void);
-void MainLoop(void);
+void calibration(void);
+void mainLoop(void);
 
-static void Init(void);
-static void ResetSources_Init(void);
-static void Oscillator_Init(void);
-static void Port_IO_Init(void);
+static void init(void);
+static void resetSources_init(void);
+static void portIO_init(void);
+#if 0
+static void oscillator_init(void);
+#endif
 
-
-void main(void)
-{
-	Init();
+void main(void) {
+	init();
 	
-	if (config.calibrated)
-		MainLoop();
-	else
-		Calibration();
+	if (config.calibrated) {
+		mainLoop();
+	} else {
+		calibration();
+	}
 }
 
 
-// инициализаци€
-static void Init(void)
-{
+static void init(void) {
 	WDT_DISABLE();
 
-	ResetSources_Init();
-	Port_IO_Init();
+	resetSources_init();
+	portIO_init();
 #if 0
-	Oscillator_Init();
+	oscillator_init();
 #endif
 
-	Config_Init();
-	Adc_Init();
-	Interface_Init();
-	Regulator_Init();
-	MainTimer_Init();
-	Motor_Init();			// инициализировать в конце, либо разрешать прерывани€ до инициализации (иначе развалитс€ PCA)
+	config_init();
+	adc_init();
+	interface_init();
+	regulator_init();
+	mainTimer_init();
+	motor_init();			// инициализировать в конце, либо разрешать прерывани€ до инициализации (иначе развалитс€ PCA)
 
 	EA = 1;					// разрешить все прерывани€
 
@@ -75,8 +74,7 @@ static void Init(void)
 
 
 // настройка источников сброса
-static void ResetSources_Init(void)
-{
+static void resetSources_init(void) {
     int i = 0;
 
 	VDM0CN = 0x80;		// enabled, level low (level HIGH is recommended in datasheet!)
@@ -92,8 +90,7 @@ static void ResetSources_Init(void)
  */
 #if 0
 // настройка внутреннего генератора и умножител€ (24.5 ћ√ц * 2 = 49 ћ√ц)
-static void Oscillator_Init(void)
-{
+static void oscillator_init(void) {
     int i = 0;
 
     PFE0CN &= ~0x20;
@@ -114,8 +111,7 @@ static void Oscillator_Init(void)
 
 
 // настройка портов
-static void Port_IO_Init(void)
-{
+static void portIO_init(void) {
 	DRIVER_DISABLE();		// запрет драйверов ключей: верхние ключи разомкнуты, нижние замкнуты
 
     // P0.0  -  Skipped,     Push-Pull,  Digital

@@ -2,8 +2,7 @@
 #include "pid.h"
 
 // инициализация ПИД-регулятора
-void PID_Init(PID *pid)
-{
+void pid_init(pidreg_t *pid) {
 	pid->ref = 0;
 	pid->fdb = 0;
 	pid->integr = 0;
@@ -12,8 +11,7 @@ void PID_Init(PID *pid)
 
 
 // вычисление управляющего воздействия
-void PID_Calc(PID *pid)
-{
+void pid_calc(pidreg_t *pid) {
 	int32_t error;
 	int32_t prop;
 	int32_t direv;
@@ -32,10 +30,13 @@ void PID_Calc(PID *pid)
 	// Integrator anti windup
 	tmp = pid->integr >> pid->fixedPointPos;
 
-	if (tmp > pid->outMax)
+	if (tmp > pid->outMax) {
 		pid->integr = (int32_t)pid->outMax << pid->fixedPointPos;
-	if (tmp < pid->outMin)
+	}
+
+	if (tmp < pid->outMin) {
 		pid->integr = (int32_t)pid->outMin << pid->fixedPointPos;
+	}
 
 	// Compute the derivative output
 	direv = pid->kD * ((int32_t)pid->fdb - (int32_t)pid->fdb1);
@@ -46,12 +47,13 @@ void PID_Calc(PID *pid)
 	outPreSat >>= pid->fixedPointPos;
 
 	// Saturate the output
-	if (outPreSat > pid->outMax)
+	if (outPreSat > pid->outMax) {
 		pid->out = pid->outMax;
-	else if (outPreSat < pid->outMin)
+	} else if (outPreSat < pid->outMin) {
 		pid->out = pid->outMin;
-	else
+	} else {
 		pid->out = (int16_t)outPreSat;
+	}
 }
 
 

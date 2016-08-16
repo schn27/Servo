@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-void Regulator_Init(void);
-int16_t Regulator_Calc(void);
+void regulator_init(void);
+int16_t regulator_calc(void);
 
 #endif
 

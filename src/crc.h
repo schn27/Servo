@@ -11,15 +11,15 @@
 
 
 #if (USE_CRC8 == 1) || (USE_CRC8_TABLE == 1)
-uint8_t Crc8(uint8_t *pcBlock, int len);
+uint8_t crc8(uint8_t *pcBlock, int len);
 #endif
 
 #if USE_CRC16 == 1
-uint16_t Crc16(uint8_t *pcBlock, int len);
+uint16_t crc16(uint8_t *pcBlock, int len);
 #endif
 
 #if USE_CHECKSUM == 1
-uint8_t CheckSum(uint8_t *pcBlock, int len);
+uint8_t checkSum(uint8_t *pcBlock, int len);
 #endif
 
 

@@ -7,15 +7,13 @@
 #define OBUFFER_MACRO	1
 
 
-typedef struct tag_OBUFFER
-{
+typedef struct {
 	uint8_t *buf;
 	uint8_t in;
 	uint8_t out;
 	uint8_t size;
 	uint8_t maxSize;
-}
-OBUFFER;
+} obuffer_t;
 
 
 // standart variant (inoperable)
@@ -23,9 +21,9 @@ OBUFFER;
 
 #error "OBUFFER_MACRO must be defined as 1!"
 
-void obuffer_init_(OBUFFER *obuf, uint8_t *buf, uint8_t maxSize);
-uint8_t obuffer_put_(OBUFFER *obuf, uint8_t value);
-uint8_t obuffer_get_(OBUFFER *obuf, uint8_t *value);
+void obuffer_init_(obuffer_t *obuf, uint8_t *buf, uint8_t maxSize);
+uint8_t obuffer_put_(obuffer_t *obuf, uint8_t value);
+uint8_t obuffer_get_(obuffer_t *obuf, uint8_t *value);
 
 #define obuffer_init(obuf, buffer, buffersize) obuffer_init_(&obuf, buffer, buffersize)
 #define obuffer_put(obuf, value) obuffer_put_(&obuf, value)
