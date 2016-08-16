@@ -1,5 +1,3 @@
-// rs485.h
-
 #ifndef RS485_H
 #define RS485_H
 

@@ -1,7 +1,5 @@
-// pid.c - ПИД регулятор
-
-#include <common.h>
-#include <pid.h>
+#include "common.h"
+#include "pid.h"
 
 // инициализация ПИД-регулятора
 void PID_Init(PID *pid)

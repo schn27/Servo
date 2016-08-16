@@ -1,7 +1,5 @@
-// convvalues.c
-
-#include <convvalues.h>
-#include <config.h>
+#include "convvalues.h"
+#include "config.h"
 
 int16_t conv_position_to_abs(int16_t value)
 {

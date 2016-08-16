@@ -1,5 +1,3 @@
-// motor.c - управление двигателем DC
-
 /*
 
   верхние ключи: 1 - замкнут, 0 - разомкнут
@@ -18,8 +16,8 @@
 */
 
 #include <stdint.h>
-#include <common.h>
-#include <version.h>
+#include "common.h"
+#include "version.h"
 
 
 // номинальное напряжение питания (6 В)

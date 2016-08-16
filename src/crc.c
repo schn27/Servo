@@ -1,4 +1,4 @@
-#include <crc.h>
+#include "crc.h"
 
 #if USE_CRC8 == 1
 /*

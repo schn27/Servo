@@ -1,5 +1,3 @@
-// maintimer.h
-
 #ifndef MAINTIMER_H
 #define MAINTIMER_H
 

@@ -1,8 +1,6 @@
-// servo.c - инициализаци€ и главный цикл
-
 /**
  *
- * @author Alexandr Malikov
+ * @author schn27
  *
  *  онтроллер рулевой машинки (модифицированый Hitec)
  *
@@ -22,13 +20,13 @@
  */
 
 
-#include <common.h>
-#include <adc.h>
-#include <interface.h>
-#include <motor.h>
-#include <maintimer.h>
-#include <regulator.h>
-#include <config.h>
+#include "common.h"
+#include "adc.h"
+#include "interface.h"
+#include "motor.h"
+#include "maintimer.h"
+#include "regulator.h"
+#include "config.h"
 
 
 void Calibration(void);

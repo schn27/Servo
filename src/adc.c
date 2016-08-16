@@ -1,8 +1,5 @@
-// adc.c - process analogue inputs
-
-#include <common.h>
 #include <stdint.h>
-
+#include "common.h"
 
 #define ADCCHN_UIN	0x0B
 #define ADCCHN_POS	0x0C

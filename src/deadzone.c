@@ -1,6 +1,4 @@
-// deadzone.c
-
-#include <deadzone.h>
+#include "deadzone.h"
 
 
 static void GetMinMax(int16_t center, uint16_t deadZone, int16_t *min, int16_t *max)

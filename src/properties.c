@@ -1,5 +1,3 @@
-// properties.c
-
-#include <properties.h>
+#include "properties.h"
 
 properties_t properties = {0};

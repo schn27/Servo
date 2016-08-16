@@ -1,8 +1,6 @@
-// rs485.c
-
-#include <common.h>
-#include <obuffer.h>
-#include <arraysize.h>
+#include "common.h"
+#include "obuffer.h"
+#include "arraysize.h"
 
 static uint8_t rxbuf[32];
 static OBUFFER data rx;

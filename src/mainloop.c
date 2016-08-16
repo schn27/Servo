@@ -1,16 +1,14 @@
-// mainloop.c - главный цикл
-
-#include <common.h>
-#include <adc.h>
-#include <interface.h>
-#include <motor.h>
-#include <maintimer.h>
-#include <regulator.h>
-#include <config.h>
-#include <properties.h>
-#include <arraysize.h>
-#include <lowpassfilter.h>
-#include <deadzone.h>
+#include "common.h"
+#include "adc.h"
+#include "interface.h"
+#include "motor.h"
+#include "maintimer.h"
+#include "regulator.h"
+#include "config.h"
+#include "properties.h"
+#include "arraysize.h"
+#include "lowpassfilter.h"
+#include "deadzone.h"
 
 
 #define MAXPOS 32767

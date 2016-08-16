@@ -1,12 +1,10 @@
-// regulator.c - вычисление управляющего воздействия на двигатель 
-
-#include <common.h>
-#include <regulator.h>
-#include <pid.h>
-#include <config.h>
-#include <properties.h>
-#include <convvalues.h>
-#include <deadzone.h>
+#include "common.h"
+#include "regulator.h"
+#include "pid.h"
+#include "config.h"
+#include "properties.h"
+#include "convvalues.h"
+#include "deadzone.h"
 
 
 /////////////////////////////////////////////

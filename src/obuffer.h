@@ -1,5 +1,3 @@
-// obuffer.h
-
 #ifndef OBUFFER_H
 #define OBUFFER_H
 

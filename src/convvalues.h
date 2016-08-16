@@ -1,5 +1,3 @@
-// convvalues.h
-
 #ifndef CONVVALUES_H
 #define CONVVALUES_H
 

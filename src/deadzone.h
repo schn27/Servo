@@ -1,5 +1,3 @@
-// deadzone.h
-
 #ifndef DEADZONE_H
 #define DEADZONE_H
 

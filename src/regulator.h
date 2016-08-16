@@ -1,5 +1,3 @@
-// regulator.h
-
 #ifndef REGULATOR_H
 #define REGULATOR_H
 

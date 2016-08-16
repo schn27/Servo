@@ -1,15 +1,13 @@
-// interface.c
-
-#include <common.h>
-#include <interface.h>
-#include <rs485.h>
-#include <crc.h>
-#include <config.h>
 #include <string.h>
-#include <properties.h>
-#include <convvalues.h>
-#include <arraysize.h>
-#include <version.h>
+#include "common.h"
+#include "interface.h"
+#include "rs485.h"
+#include "crc.h"
+#include "config.h"
+#include "properties.h"
+#include "convvalues.h"
+#include "arraysize.h"
+#include "version.h"
 
 
 #define FAILSAFE_TIMEOUT	1000

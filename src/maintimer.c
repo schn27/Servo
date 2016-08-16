@@ -1,6 +1,4 @@
-// maintimer.c
-
-#include <common.h>
+#include "common.h"
 
 // частота таймера 1000 √ц
 #define FREQ	1000.0

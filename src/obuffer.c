@@ -1,6 +1,4 @@
-// obuffer.c
-
-#include <obuffer.h>
+#include "obuffer.h"
 
 #if OBUFFER_MACRO == 0
 

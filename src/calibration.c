@@ -1,10 +1,8 @@
-// calibration.c - определение крайних положений
-
-#include <common.h>
-#include <adc.h>
-#include <motor.h>
-#include <maintimer.h>
-#include <config.h>
+#include "common.h"
+#include "adc.h"
+#include "motor.h"
+#include "maintimer.h"
+#include "config.h"
 
 // управляющий сигнал на двигатель при калибровке (~15% от максимума)
 #define CALIBRATION_OUTPUT 5000

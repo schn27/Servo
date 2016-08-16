@@ -1,9 +1,7 @@
-// config.c
-
-#include <common.h>
-#include <config.h>
-#include <F410_FlashPrimitives.h>
-#include <crc.h>
+#include "common.h"
+#include "config.h"
+#include "F410_FlashPrimitives.h"
+#include "crc.h"
 
 
 #define FIXED8P8(v) ((v) * 256)

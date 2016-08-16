@@ -1,6 +1,4 @@
-// lowpassfilter.c
-
-#include <lowpassfilter.h>
+#include "lowpassfilter.h"
 
 void LowPassFilter(int16_t *cur_value, int16_t value, int16_t alpha)
 {

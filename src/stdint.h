@@ -1,5 +1,3 @@
-// stdint.h
-
 // this is nonstandart stdint.h, because Keil doesn't include stdint.h
 
 #ifndef STDINT_H

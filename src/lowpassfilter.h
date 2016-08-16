@@ -1,5 +1,3 @@
-// lowpassfilter.h
-
 #ifndef LOWPASSFILTER_H
 #define LOWPASSFILTER_H
 

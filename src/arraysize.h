@@ -1,5 +1,3 @@
-// arraysize.h
-
 #ifndef ARRAYSIZE_H
 #define ARRAYSIZE_H
 
